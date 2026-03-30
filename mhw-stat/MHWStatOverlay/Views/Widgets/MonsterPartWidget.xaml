@@ -1,0 +1,114 @@
+<UserControl x:Class="MHWStatOverlay.Views.Widgets.MonsterPartWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ItemsControl ItemsSource="{Binding Monsters}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Border Margin="0,0,0,4" Padding="6,8,6,4" CornerRadius="2">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#B0000000" Offset="0"/>
+                            <GradientStop Color="#60000000" Offset="0.5"/>
+                            <GradientStop Color="#00000000" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding Parts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,2"
+                                            Visibility="{Binding IsHidden, Converter={StaticResource InverseBoolToVisibility}}">
+                                    <!-- Name + HP text row -->
+                                    <DockPanel Margin="4,0,4,1">
+                                        <!-- Eye icon (click to hide) -->
+                                        <TextBlock Text="&#x25C9;" Foreground="#40C8B888" FontSize="8"
+                                                   Margin="0,0,4,0" VerticalAlignment="Center"
+                                                   Cursor="Hand" MouseLeftButtonDown="EyeIcon_Click"
+                                                   ToolTip="Click to hide">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect ShadowDepth="1" BlurRadius="2"
+                                                                  Color="#000000" Opacity="0.8"/>
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+
+                                        <TextBlock Text="{Binding Name}" Foreground="#90C8B888"
+                                                   FontSize="9" FontFamily="Segoe UI" FontWeight="SemiBold"
+                                                   TextTrimming="CharacterEllipsis">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect ShadowDepth="1" BlurRadius="3"
+                                                                  Color="#000000" Opacity="0.85"/>
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBlock FontSize="8.5" FontFamily="Segoe UI" Foreground="#58C8B888">
+                                                <TextBlock.Effect>
+                                                    <DropShadowEffect ShadowDepth="1" BlurRadius="2"
+                                                                      Color="#000000" Opacity="0.8"/>
+                                                </TextBlock.Effect>
+                                                <Run Text="{Binding CurrentHP, StringFormat={}{0:F0}, Mode=OneWay}"
+                                                     Foreground="#70C8B888"/>
+                                                <Run Text="/" Foreground="#28C8B888"/>
+                                                <Run Text="{Binding MaxHP, StringFormat={}{0:F0}, Mode=OneWay}"/>
+                                            </TextBlock>
+
+                                            <TextBlock Text="{Binding BreakCount, StringFormat=' x{0}'}"
+                                                       Foreground="#AAC83020" FontSize="8.5"
+                                                       FontFamily="Segoe UI" FontWeight="Bold"
+                                                       Visibility="{Binding DataContext.Settings.ShowPartBreakCount,
+                                                       RelativeSource={RelativeSource AncestorType=UserControl},
+                                                       Converter={StaticResource BoolToVisibility}}">
+                                                <TextBlock.Effect>
+                                                    <DropShadowEffect ShadowDepth="1" BlurRadius="2"
+                                                                      Color="#000000" Opacity="0.8"/>
+                                                </TextBlock.Effect>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DockPanel>
+
+                                    <!-- Part bar — same Elden Ring style, smaller -->
+                                    <Grid Height="4">
+                                        <Grid>
+                                            <Border Background="#40181510" Margin="3,0,3,0"/>
+                                            <Polygon Points="0,2 3,0 3,4" Fill="#40181510"
+                                                     HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <Polygon Points="3,2 0,0 0,4" Fill="#40181510"
+                                                     HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
+
+                                        <Border HorizontalAlignment="Left" Margin="3,0,3,0">
+                                            <Border.Width>
+                                                <MultiBinding Converter="{StaticResource PercentToWidthConverter}">
+                                                    <Binding Path="HPPercentage"/>
+                                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Grid}"/>
+                                                </MultiBinding>
+                                            </Border.Width>
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                    <GradientStop Color="#DD4f1119" Offset="0"/>
+                                                    <GradientStop Color="#DD1a0508" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+
+                                        <Border Height="1" VerticalAlignment="Top" Margin="3,0,3,0"
+                                                IsHitTestVisible="False" Opacity="0.15" Background="White">
+                                            <Border.Width>
+                                                <MultiBinding Converter="{StaticResource PercentToWidthConverter}">
+                                                    <Binding Path="HPPercentage"/>
+                                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Grid}"/>
+                                                </MultiBinding>
+                                            </Border.Width>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

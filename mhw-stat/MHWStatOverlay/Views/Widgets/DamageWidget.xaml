@@ -1,0 +1,91 @@
+<UserControl x:Class="MHWStatOverlay.Views.Widgets.DamageWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Border Padding="6,8,6,4" CornerRadius="2">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#B0000000" Offset="0"/>
+                <GradientStop Color="#60000000" Offset="0.5"/>
+                <GradientStop Color="#00000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+    <StackPanel>
+        <ItemsControl ItemsSource="{Binding Players}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,0,0,3">
+                        <!-- Name + damage row -->
+                        <DockPanel Margin="4,0,4,1">
+                            <TextBlock Text="{Binding Name}" Foreground="#A0C8B888"
+                                       FontSize="10" FontFamily="Segoe UI">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect ShadowDepth="1" BlurRadius="3" Color="#000000" Opacity="0.9"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding Damage, StringFormat={}{0:N0}}"
+                                           Foreground="#B0C8A838" FontSize="11"
+                                           FontFamily="Segoe UI" FontWeight="Bold"
+                                           Visibility="{Binding DataContext.Settings.ShowDamageNumbers,
+                                           RelativeSource={RelativeSource AncestorType=UserControl},
+                                           Converter={StaticResource BoolToVisibility}}">
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect ShadowDepth="1" BlurRadius="3" Color="#000000" Opacity="0.9"/>
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                                <TextBlock Text="{Binding DamagePercentage, StringFormat=' {0:F0}%'}"
+                                           Foreground="#50C8B888" FontSize="9" FontFamily="Segoe UI"
+                                           VerticalAlignment="Bottom" Margin="0,0,0,1"
+                                           Visibility="{Binding DataContext.Settings.ShowDamagePercentage,
+                                           RelativeSource={RelativeSource AncestorType=UserControl},
+                                           Converter={StaticResource BoolToVisibility}}">
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect ShadowDepth="1" BlurRadius="2" Color="#000000" Opacity="0.8"/>
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <!-- Damage bar — same style -->
+                        <Grid Height="4">
+                            <Grid>
+                                <Border Background="#40181510" Margin="3,0,3,0"/>
+                                <Polygon Points="0,2 3,0 3,4" Fill="#40181510"
+                                         HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Polygon Points="3,2 0,0 0,4" Fill="#40181510"
+                                         HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <Border HorizontalAlignment="Left" Margin="3,0,3,0">
+                                <Border.Width>
+                                    <MultiBinding Converter="{StaticResource PercentToWidthConverter}">
+                                        <Binding Path="DamagePercentage"/>
+                                        <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Grid}"/>
+                                    </MultiBinding>
+                                </Border.Width>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#DDC8A030" Offset="0"/>
+                                        <GradientStop Color="#DD887020" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+                            <Border Height="1" VerticalAlignment="Top" Margin="3,0,3,0"
+                                    IsHitTestVisible="False" Opacity="0.15" Background="White">
+                                <Border.Width>
+                                    <MultiBinding Converter="{StaticResource PercentToWidthConverter}">
+                                        <Binding Path="DamagePercentage"/>
+                                        <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Grid}"/>
+                                    </MultiBinding>
+                                </Border.Width>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+    </Border>
+</UserControl>

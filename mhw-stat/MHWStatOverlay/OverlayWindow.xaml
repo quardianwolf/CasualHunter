@@ -1,0 +1,107 @@
+<Window x:Class="MHWStatOverlay.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:widgets="clr-namespace:MHWStatOverlay.Views.Widgets"
+        Title="CasualHunter"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        WindowState="Maximized"
+        ResizeMode="NoResize">
+
+    <Grid>
+        <Canvas x:Name="OverlayCanvas">
+            <!-- Status -->
+            <TextBlock Canvas.Left="10" Canvas.Top="4" Tag="status"
+                       Text="{Binding StatusText}"
+                       Foreground="#40FFFFFF" FontSize="9" FontFamily="Segoe UI"
+                       Visibility="{Binding IsConnected, Converter={StaticResource InverseBoolToVisibility}}"/>
+
+            <!-- Monster Widget -->
+            <widgets:MonsterWidget x:Name="MonsterWidgetCtrl"
+                Canvas.Left="{Binding Settings.MonsterWidgetX, Mode=TwoWay}"
+                Canvas.Top="{Binding Settings.MonsterWidgetY, Mode=TwoWay}"
+                Width="{Binding Settings.MonsterWidgetWidth}"
+                DataContext="{Binding}"
+                Visibility="{Binding Settings.ShowMonsterWidget, Converter={StaticResource BoolToVisibility}}"/>
+
+            <!-- Part Widget -->
+            <widgets:MonsterPartWidget x:Name="PartWidgetCtrl"
+                Canvas.Left="{Binding Settings.PartWidgetX, Mode=TwoWay}"
+                Canvas.Top="{Binding Settings.PartWidgetY, Mode=TwoWay}"
+                Width="{Binding Settings.PartWidgetWidth}"
+                DataContext="{Binding}"
+                Visibility="{Binding Settings.ShowPartWidget, Converter={StaticResource BoolToVisibility}}"/>
+
+            <!-- Damage Widget -->
+            <widgets:DamageWidget x:Name="DamageWidgetCtrl"
+                Canvas.Left="{Binding Settings.DamageWidgetX, Mode=TwoWay}"
+                Canvas.Top="{Binding Settings.DamageWidgetY, Mode=TwoWay}"
+                Width="{Binding Settings.DamageWidgetWidth}"
+                DataContext="{Binding}"
+                Visibility="{Binding Settings.ShowDamageWidget, Converter={StaticResource BoolToVisibility}}"/>
+
+            <!-- Quest Widget -->
+            <widgets:QuestWidget x:Name="QuestWidgetCtrl"
+                Canvas.Left="{Binding Settings.QuestWidgetX, Mode=TwoWay}"
+                Canvas.Top="{Binding Settings.QuestWidgetY, Mode=TwoWay}"
+                Width="{Binding Settings.QuestWidgetWidth}"
+                DataContext="{Binding}"
+                Visibility="{Binding Settings.ShowQuestWidget, Converter={StaticResource BoolToVisibility}}"/>
+        </Canvas>
+
+        <!-- ESC hint (shown briefly when ESC is pressed in game) -->
+        <Border x:Name="EscHint" Visibility="Collapsed"
+                VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,40"
+                Background="#D0101018" CornerRadius="4" Padding="12,6"
+                BorderBrush="#20FFFFFF" BorderThickness="1">
+            <TextBlock Foreground="#90FFFFFF" FontSize="10" FontFamily="Segoe UI">
+                <Run Text="Press" Foreground="#60FFFFFF"/>
+                <Run Text=" Insert " Foreground="#FFD4A840" FontWeight="Bold"/>
+                <Run Text="to edit overlay layout" Foreground="#60FFFFFF"/>
+            </TextBlock>
+        </Border>
+
+        <!-- Edit Mode Toolbar -->
+        <Border x:Name="EditToolbar" Visibility="Collapsed"
+                VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,12,0,0"
+                CornerRadius="4" Padding="12,7" BorderBrush="#20FFFFFF" BorderThickness="1">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#F0101018" Offset="0"/>
+                    <GradientStop Color="#F0181820" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel Orientation="Horizontal">
+                <Border Width="3" Background="#FFD4A840" CornerRadius="1" Margin="0,0,10,0"/>
+                <TextBlock Text="EDIT" Foreground="#FFD4A840" FontSize="10" FontWeight="Bold"
+                           VerticalAlignment="Center" Margin="0,0,12,0" FontFamily="Segoe UI"/>
+
+                <Button x:Name="BtnToggleMonster" Content="Monster" Margin="2,0" Click="ToggleWidget_Click" Tag="Monster"
+                        Style="{x:Null}" Foreground="#FFCCCCCC" BorderThickness="0"
+                        Padding="8,3" FontSize="9.5" FontFamily="Segoe UI" Cursor="Hand"/>
+                <Button x:Name="BtnToggleParts" Content="Parts" Margin="2,0" Click="ToggleWidget_Click" Tag="Parts"
+                        Style="{x:Null}" Foreground="#FFCCCCCC" BorderThickness="0"
+                        Padding="8,3" FontSize="9.5" FontFamily="Segoe UI" Cursor="Hand"/>
+                <Button x:Name="BtnToggleDamage" Content="Damage" Margin="2,0" Click="ToggleWidget_Click" Tag="Damage"
+                        Style="{x:Null}" Foreground="#FFCCCCCC" BorderThickness="0"
+                        Padding="8,3" FontSize="9.5" FontFamily="Segoe UI" Cursor="Hand"/>
+                <Button x:Name="BtnToggleQuest" Content="Quest" Margin="2,0" Click="ToggleWidget_Click" Tag="Quest"
+                        Style="{x:Null}" Foreground="#FFCCCCCC" BorderThickness="0"
+                        Padding="8,3" FontSize="9.5" FontFamily="Segoe UI" Cursor="Hand"/>
+
+                <Button Content="Show All Parts" Margin="2,0" Click="ShowAllParts_Click"
+                        Style="{x:Null}" Foreground="#FFCCCCCC" BorderThickness="0"
+                        Background="#30FFFFFF" Padding="8,3" FontSize="9.5" FontFamily="Segoe UI" Cursor="Hand"/>
+
+                <Border Width="1" Background="#20FFFFFF" Margin="8,0"/>
+                <TextBlock Foreground="#40FFFFFF" FontSize="9"
+                           VerticalAlignment="Center" Margin="8,0,0,0" FontFamily="Segoe UI">
+                    <Run Text="Insert to close | Click part to hide"/>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
