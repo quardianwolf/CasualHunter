@@ -28,5 +28,6 @@ package-lock.json
 
 ## Claude
 .claude/
+CLAUDE.md
 *_wpftmp.csproj
 *.zip
